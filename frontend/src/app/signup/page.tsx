@@ -47,7 +47,16 @@ export default function SignupPage() {
   const onSubmit = async (data: SignupFormData) => {
     setIsLoading(true);
     try {
-      const { confirmPassword: _, ...signupData } = data;
+      // Extract confirmPassword and use the rest for signup
+      const signupData = {
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        phone: data.phone,
+        password: data.password,
+        shippingAddress: data.shippingAddress,
+        username: data.username,
+      };
       await signup(signupData);
       showToast('تم إنشاء الحساب بنجاح!', 'success');
       router.push('/books');

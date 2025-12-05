@@ -7,7 +7,7 @@ import api from '@/lib/api';
 import { Header } from '@/components/shared/Header';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { useToast } from '@/components/ui/toast';
 import { useAuth } from '@/contexts/AuthContext';
 import { Book } from '@/types';

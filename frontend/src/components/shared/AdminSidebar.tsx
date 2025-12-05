@@ -10,7 +10,6 @@ import {
   Truck,
   Users,
   BarChart3,
-  Settings,
 } from 'lucide-react';
 
 const navItems = [

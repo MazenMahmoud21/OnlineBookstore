@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
-import { ShoppingCart, User, BookOpen, LogOut, Menu, X, UserCircle, Package, LayoutDashboard, Info } from 'lucide-react';
+import { ShoppingCart, BookOpen, LogOut, Menu, X, UserCircle, Package, LayoutDashboard, Info } from 'lucide-react';
 import { useState } from 'react';
 
 export function Header() {
@@ -199,46 +199,6 @@ export function Header() {
                   </Link>
                   <Link href="/signup" onClick={() => setMobileMenuOpen(false)}>
                     <Button className="w-full bg-gradient-to-r from-green-700 to-green-600">إنشاء حساب</Button>
-                  </Link>
-                </>
-              )}
-            </nav>
-          </div>
-        )}
-      </div>
-    </header>
-  );
-}
-                    className="text-sm font-medium"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    Profile
-                  </Link>
-                  <button
-                    className="text-sm font-medium text-left text-red-600"
-                    onClick={() => {
-                      setMobileMenuOpen(false);
-                      handleLogout();
-                    }}
-                  >
-                    Logout
-                  </button>
-                </>
-              ) : (
-                <>
-                  <Link
-                    href="/login"
-                    className="text-sm font-medium"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    Login
-                  </Link>
-                  <Link
-                    href="/signup"
-                    className="text-sm font-medium"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    Sign Up
                   </Link>
                 </>
               )}
