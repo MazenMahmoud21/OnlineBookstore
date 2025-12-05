@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { Header } from '@/components/shared/Header';
 import { Card, CardContent } from '@/components/ui/card';
 import { 
@@ -127,7 +128,7 @@ export default function AboutPage() {
               <div className="flex items-center gap-3 text-primary">
                 <Zap className="h-6 w-6" />
                 <span className="font-semibold text-lg">
-                  "المعرفة نور، والقراءة طريق النور"
+                  &quot;المعرفة نور، والقراءة طريق النور&quot;
                 </span>
               </div>
             </CardContent>
@@ -262,20 +263,20 @@ export default function AboutPage() {
                   اكتشف عالماً من المعرفة والإبداع في مكتبتنا الرقمية
                 </p>
                 <div className="flex gap-4 justify-center flex-wrap">
-                  <a
+                  <Link
                     href="/books"
                     className="inline-flex items-center gap-2 bg-white text-primary px-8 py-4 rounded-lg font-semibold hover:shadow-xl transition-all hover:-translate-y-1"
                   >
                     <BookOpen className="h-5 w-5" />
                     تصفح المكتبة
-                  </a>
-                  <a
+                  </Link>
+                  <Link
                     href="/signup"
                     className="inline-flex items-center gap-2 bg-white/10 backdrop-blur text-white border-2 border-white/30 px-8 py-4 rounded-lg font-semibold hover:bg-white/20 transition-all"
                   >
                     <Users className="h-5 w-5" />
                     انضم إلينا
-                  </a>
+                  </Link>
                 </div>
               </div>
             </CardContent>

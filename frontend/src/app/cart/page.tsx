@@ -66,7 +66,7 @@ function CartContent() {
       });
       return response.data;
     },
-    onSuccess: (data) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['cart'] });
       showToast('Order placed successfully!', 'success');
       setShowCheckout(false);
@@ -277,15 +277,6 @@ export default function CartPage() {
           <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-green-800 to-green-600 bg-clip-text text-transparent mb-3">سلة التسوق</h1>
           <p className="text-gray-600 text-lg">راجع مشترياتك وأتمم طلبك</p>
         </div>
-        <CartContent />
-      </main>
-    </ProtectedRoute>
-  );
-}
-    <ProtectedRoute requiredRole="Customer">
-      <Header />
-      <main className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-8">Shopping Cart</h1>
         <CartContent />
       </main>
     </ProtectedRoute>

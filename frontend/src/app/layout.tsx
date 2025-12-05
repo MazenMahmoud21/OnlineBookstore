@@ -3,8 +3,8 @@ import "./globals.css";
 import { Providers } from "./providers";
 
 export const metadata: Metadata = {
-  title: "Online Bookstore",
-  description: "Your one-stop shop for all your reading needs",
+  title: "مكتبة المملكة | Online Bookstore",
+  description: "مكتبة المملكة الرقمية - اكتشف عالمًا من المعرفة والإلهام",
 };
 
 export default function RootLayout({
@@ -13,8 +13,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className="antialiased min-h-screen">
+    <html lang="ar" dir="rtl">
+      <body className="antialiased min-h-screen font-arabic">
         <Providers>
           {children}
         </Providers>
