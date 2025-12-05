@@ -114,7 +114,11 @@ export default function Home() {
                 { icon: TruckIcon, title: 'توصيل سريع', desc: 'شحن سريع لتصلك كتبك في الوقت المناسب', color: 'from-blue-500 to-cyan-600', bgColor: 'from-blue-100 to-blue-50' },
                 { icon: Shield, title: 'دفع آمن', desc: 'معلوماتك المالية محمية بأعلى معايير الأمان', color: 'from-purple-500 to-violet-600', bgColor: 'from-purple-100 to-purple-50' },
               ].map((feature, index) => (
-                <Card key={index} className={`hover-lift border-none shadow-xl overflow-hidden group stagger-${index + 1} animate-fade-in`}>
+                <Card 
+                  key={index} 
+                  className="hover-lift border-none shadow-xl overflow-hidden group animate-fade-in"
+                  style={{ animationDelay: `${index * 100}ms` }}
+                >
                   <CardContent className="pt-10 pb-8 text-center relative">
                     {/* Decorative corner */}
                     <div className={`absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl ${feature.bgColor} rounded-bl-[100%] opacity-60`}></div>
@@ -151,7 +155,8 @@ export default function Home() {
                 <Link 
                   key={category.name} 
                   href={`/books?category=${category.name}`}
-                  className={`group relative bg-white rounded-3xl p-8 text-center shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-3 border border-gray-100 overflow-hidden stagger-${index + 1} animate-fade-in`}
+                  className="group relative bg-white rounded-3xl p-8 text-center shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-3 border border-gray-100 overflow-hidden animate-fade-in"
+                  style={{ animationDelay: `${index * 100}ms` }}
                 >
                   {/* Gradient background on hover */}
                   <div className={`absolute inset-0 bg-gradient-to-br ${category.lightColor} opacity-0 group-hover:opacity-100 transition-opacity duration-500`}></div>

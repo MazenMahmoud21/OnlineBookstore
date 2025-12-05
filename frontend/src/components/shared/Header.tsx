@@ -166,6 +166,9 @@ export function Header() {
           <button
             className="md:hidden p-2.5 rounded-xl hover:bg-green-50 transition-all duration-300 relative"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label={mobileMenuOpen ? 'إغلاق القائمة' : 'فتح القائمة'}
+            aria-expanded={mobileMenuOpen}
+            aria-controls="mobile-menu"
           >
             <div className="relative w-6 h-6">
               <Menu className={`h-6 w-6 text-green-700 absolute inset-0 transition-all duration-300 ${mobileMenuOpen ? 'opacity-0 rotate-90 scale-0' : 'opacity-100 rotate-0 scale-100'}`} />
@@ -175,9 +178,13 @@ export function Header() {
         </div>
 
         {/* Mobile Menu with enhanced animation */}
-        <div className={`md:hidden overflow-hidden transition-all duration-500 ease-in-out ${mobileMenuOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'}`}>
+        <div 
+          id="mobile-menu"
+          className={`md:hidden overflow-hidden transition-all duration-500 ease-in-out ${mobileMenuOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0'}`}
+          aria-hidden={!mobileMenuOpen}
+        >
           <div className="py-4 border-t border-green-100">
-            <nav className="flex flex-col gap-2">
+            <nav className="flex flex-col gap-2" role="navigation" aria-label="القائمة الرئيسية">
               {[
                 { href: '/books', icon: BookOpen, label: 'المكتبة' },
                 { href: '/about', icon: Info, label: 'من نحن' },

@@ -36,10 +36,11 @@ export function BookCard({ book, onAddToCart, showAddToCart = true }: BookCardPr
             <Sparkles className="h-5 w-5 text-yellow-500 absolute -top-2 -right-2 animate-pulse" />
           </div>
           
-          {/* Quick view button on hover */}
+          {/* Quick view button - visible on hover but accessible via focus */}
           <Link 
             href={`/books/${book.ISBN}`}
-            className="absolute bottom-4 left-1/2 -translate-x-1/2 translate-y-10 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-500"
+            className="absolute bottom-4 left-1/2 -translate-x-1/2 translate-y-10 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 focus:translate-y-0 focus:opacity-100 transition-all duration-500"
+            aria-label={`عرض تفاصيل كتاب ${book.Title}`}
           >
             <span className="inline-flex items-center gap-2 bg-white/95 backdrop-blur-sm text-green-700 px-4 py-2 rounded-full text-sm font-semibold shadow-lg hover:bg-white hover:shadow-xl transition-all">
               <Eye className="h-4 w-4" />
