@@ -24,8 +24,8 @@ const bookSchema = z.object({
   publicationYear: z.string().optional(),
   sellingPrice: z.string().min(1, 'Price is required'),
   categoryId: z.string().min(1, 'Category is required'),
-  quantityInStock: z.string().default('0'),
-  reorderThreshold: z.string().default('10'),
+  quantityInStock: z.string(),
+  reorderThreshold: z.string(),
   authorIds: z.array(z.string()).optional(),
 });
 
@@ -88,6 +88,17 @@ export default function AdminBooksPage() {
     formState: { errors },
   } = useForm<BookFormData>({
     resolver: zodResolver(bookSchema),
+    defaultValues: {
+      isbn: '',
+      title: '',
+      publisherId: '',
+      publicationYear: '',
+      sellingPrice: '',
+      categoryId: '',
+      quantityInStock: '0',
+      reorderThreshold: '10',
+      authorIds: [],
+    },
   });
 
   // Create book mutation
@@ -241,7 +252,13 @@ export default function AdminBooksPage() {
                       <td className="p-4 text-sm">{book.ISBN}</td>
                       <td className="p-4">
                         <p className="font-medium line-clamp-1">{book.Title}</p>
-                        <p className="text-sm text-gray-600">{book.Authors}</p>
+                        <p className="text-sm text-gray-600">
+                          {typeof book.Authors === 'string' 
+                            ? book.Authors 
+                            : Array.isArray(book.Authors) 
+                              ? book.Authors.map(a => a.Name).join(', ')
+                              : '-'}
+                        </p>
                       </td>
                       <td className="p-4">
                         <Badge variant="secondary">{book.CategoryName}</Badge>

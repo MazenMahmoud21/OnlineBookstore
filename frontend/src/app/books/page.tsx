@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 import api from '@/lib/api';
@@ -14,13 +14,13 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Book, Category } from '@/types';
 import { Search, Loader2 } from 'lucide-react';
 
-export default function BooksPage() {
+function BooksContent() {
   const searchParams = useSearchParams();
   const { isAuthenticated, user } = useAuth();
   const { showToast } = useToast();
   
-  const [search, setSearch] = useState(searchParams.get('q') || '');
-  const [category, setCategory] = useState(searchParams.get('category') || '');
+  const [search, setSearch] = useState(searchParams?.get('q') || '');
+  const [category, setCategory] = useState(searchParams?.get('category') || '');
   const [page, setPage] = useState(1);
   const limit = 12;
 
@@ -165,5 +165,22 @@ export default function BooksPage() {
         )}
       </main>
     </>
+  );
+}
+
+export default function BooksPage() {
+  return (
+    <Suspense fallback={
+      <>
+        <Header />
+        <main className="container mx-auto px-4 py-8">
+          <div className="flex justify-center py-12">
+            <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+          </div>
+        </main>
+      </>
+    }>
+      <BooksContent />
+    </Suspense>
   );
 }

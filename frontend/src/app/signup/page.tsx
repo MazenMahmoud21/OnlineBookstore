@@ -47,8 +47,7 @@ export default function SignupPage() {
   const onSubmit = async (data: SignupFormData) => {
     setIsLoading(true);
     try {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { confirmPassword, ...signupData } = data;
+      const { confirmPassword: _, ...signupData } = data;
       await signup(signupData);
       showToast('Account created successfully!', 'success');
       router.push('/books');
