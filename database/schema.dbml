@@ -1,0 +1,211 @@
+// Online Bookstore Database Schema - DBML
+// Use at https://dbdiagram.io to visualize
+
+Project OnlineBookstore {
+  database_type: 'MS SQL Server'
+  Note: 'Online Bookstore Order Processing System - Complete Database Schema'
+}
+
+// ============================================
+// CORE USER MANAGEMENT
+// ============================================
+
+Table Users {
+  UserID int [pk, increment, note: 'Primary key - Auto-increment']
+  Username nvarchar(50) [not null, unique, note: 'Unique username for login']
+  PasswordHash nvarchar(255) [not null, note: 'Hashed password']
+  Role nvarchar(20) [not null, note: 'Admin or Customer']
+  FirstName nvarchar(100) [not null]
+  LastName nvarchar(100) [not null]
+  Email nvarchar(255) [not null, unique]
+  Phone nvarchar(20)
+  ShippingAddress nvarchar(500)
+  CreatedAt datetime [default: `GETDATE()`, note: 'Account creation timestamp']
+  
+  Note: 'User accounts with role-based access (Admin/Customer)'
+  Indexes {
+    Email [name: 'IX_Users_Email']
+    Username [name: 'IX_Users_Username']
+  }
+}
+
+Table RefreshTokens {
+  TokenID int [pk, increment]
+  UserID int [not null, ref: > Users.UserID]
+  Token nvarchar(500) [not null, note: 'JWT refresh token']
+  ExpiresAt datetime [not null]
+  CreatedAt datetime [default: `GETDATE()`]
+  IsRevoked bit [default: 0, note: 'Token revocation flag']
+  
+  Note: 'JWT refresh token management for authentication'
+}
+
+// ============================================
+// CATALOG MANAGEMENT
+// ============================================
+
+Table Publishers {
+  PublisherID int [pk, increment]
+  Name nvarchar(200) [not null]
+  Address nvarchar(500)
+  Phone nvarchar(20)
+  
+  Note: 'Book publishers/suppliers'
+}
+
+Table Categories {
+  CategoryID int [pk, increment]
+  CategoryName nvarchar(50) [not null, unique, note: 'Science, Art, Religion, History, Geography']
+  
+  Note: 'Book categories - fixed set of 5 categories'
+}
+
+Table Books {
+  ISBN nvarchar(20) [pk, note: 'International Standard Book Number']
+  Title nvarchar(300) [not null]
+  PublisherID int [not null, ref: > Publishers.PublisherID]
+  PublicationYear int
+  SellingPrice decimal(10,2) [not null, note: 'Customer-facing price']
+  CategoryID int [not null, ref: > Categories.CategoryID]
+  QuantityInStock int [not null, default: 0, note: 'Current inventory level']
+  ReorderThreshold int [not null, default: 10, note: 'Trigger point for auto-reorder']
+  
+  Note: 'Book inventory with auto-reorder capability'
+  Indexes {
+    Title [name: 'IX_Books_Title']
+  }
+}
+
+Table Authors {
+  AuthorID int [pk, increment]
+  Name nvarchar(200) [not null]
+  
+  Note: 'Book authors'
+}
+
+Table BookAuthors {
+  ISBN nvarchar(20) [pk, ref: > Books.ISBN]
+  AuthorID int [pk, ref: > Authors.AuthorID]
+  
+  Note: 'Many-to-Many relationship: Books can have multiple authors'
+  Indexes {
+    AuthorID [name: 'IX_BookAuthors_AuthorID']
+  }
+}
+
+// ============================================
+// PUBLISHER ORDER MANAGEMENT (Inventory Replenishment)
+// ============================================
+
+Table PublisherOrders {
+  PubOrderID int [pk, increment]
+  PublisherID int [not null, ref: > Publishers.PublisherID]
+  OrderDate datetime [default: `GETDATE()`]
+  Status nvarchar(20) [not null, default: 'Pending', note: 'Pending, Confirmed, Cancelled']
+  TotalAmount decimal(12,2) [default: 0, note: 'Total order cost']
+  
+  Note: 'Replenishment orders to publishers - auto-created by triggers when stock is low'
+}
+
+Table PublisherOrderItems {
+  PubOrderItemID int [pk, increment]
+  PubOrderID int [not null, ref: > PublisherOrders.PubOrderID]
+  ISBN nvarchar(20) [not null, ref: > Books.ISBN]
+  Quantity int [not null, note: 'Order quantity - must be > 0']
+  UnitPrice decimal(10,2) [not null, note: 'Cost per unit']
+  
+  Note: 'Line items for publisher orders'
+}
+
+// ============================================
+// CUSTOMER ORDER MANAGEMENT (Sales)
+// ============================================
+
+Table CustomerOrders {
+  CustOrderID int [pk, increment]
+  UserID int [not null, ref: > Users.UserID]
+  OrderDate datetime [default: `GETDATE()`]
+  TotalAmount decimal(12,2) [not null, note: 'Total order value']
+  CreditCardLast4 nvarchar(4) [note: 'Last 4 digits of card']
+  CreditCardExpiry date [note: 'Card expiration date']
+  Status nvarchar(20) [default: 'Completed']
+  
+  Note: 'Customer purchase orders - created from cart checkout'
+  Indexes {
+    OrderDate [name: 'IX_CustomerOrders_OrderDate']
+  }
+}
+
+Table CustomerOrderItems {
+  CustOrderItemID int [pk, increment]
+  CustOrderID int [not null, ref: > CustomerOrders.CustOrderID]
+  ISBN nvarchar(20) [not null, ref: > Books.ISBN]
+  Quantity int [not null, note: 'Order quantity - must be > 0']
+  UnitPrice decimal(10,2) [not null, note: 'Price at time of purchase']
+  
+  Note: 'Line items for customer orders'
+  Indexes {
+    ISBN [name: 'IX_CustomerOrderItems_ISBN']
+  }
+}
+
+// ============================================
+// SHOPPING CART MANAGEMENT
+// ============================================
+
+Table ShoppingCarts {
+  CartID int [pk, increment]
+  UserID int [not null, unique, ref: > Users.UserID, note: 'One cart per user']
+  CreatedAt datetime [default: `GETDATE()`]
+  
+  Note: 'Shopping cart - one per customer'
+}
+
+Table CartItems {
+  CartItemID int [pk, increment]
+  CartID int [not null, ref: > ShoppingCarts.CartID]
+  ISBN nvarchar(20) [not null, ref: > Books.ISBN]
+  Quantity int [not null, default: 1, note: 'Item quantity - must be > 0']
+  
+  Note: 'Items in shopping cart - cleared after checkout'
+  Indexes {
+    (CartID, ISBN) [unique, name: 'UQ_CartItems_Cart_Book']
+  }
+}
+
+// ============================================
+// BUSINESS LOGIC NOTES
+// ============================================
+
+Note BusinessLogic {
+  '''
+  # Key Database Features:
+  
+  ## Triggers:
+  1. **trg_PreventNegativeStock** - Prevents stock from going below zero
+  2. **trg_AutoReorder** - Auto-creates publisher order when stock < threshold
+  
+  ## Stored Procedures:
+  1. **ConfirmPublisherOrder** - Confirms pending order and updates stock
+  2. **CheckoutCart** - Validates payment, creates order, deducts stock, empties cart
+  3. **GetTotalSalesByMonth** - Monthly sales reporting
+  4. **GetTotalSalesByDate** - Daily sales reporting
+  5. **GetTopCustomers** - Top customers by purchase amount
+  6. **GetTopSellingBooks** - Bestselling books by quantity
+  7. **GetTimesBookReordered** - Replenishment frequency per book
+  
+  ## Key Relationships:
+  - Users can have multiple orders and one shopping cart
+  - Books can have multiple authors (many-to-many)
+  - Books belong to one category and one publisher
+  - Orders (customer & publisher) have multiple line items
+  - Stock levels trigger automatic reordering
+  
+  ## Security Features:
+  - JWT-based authentication with refresh tokens
+  - Password hashing (bcrypt)
+  - Role-based access control (Admin/Customer)
+  - Rate limiting on auth endpoints
+  - CORS protection
+  '''
+}

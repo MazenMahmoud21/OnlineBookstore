@@ -33,54 +33,57 @@ export default function AdminOrdersPage() {
   });
 
   return (
-    <div className="space-y-6">
-      <h1 className="text-3xl font-bold">Customer Orders</h1>
+    <div className="space-y-6 animate-fade-in">
+      <h1 className="text-4xl font-bold saudi-gradient-text">طلبات العملاء</h1>
 
-      <Card>
+      <Card className="border-2 border-primary/20">
         <CardContent className="p-0">
           {isLoading ? (
             <div className="flex justify-center py-12">
-              <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+              <div className="text-center">
+                <Loader2 className="h-12 w-12 animate-spin text-primary mx-auto mb-3" />
+                <p className="text-muted-foreground">جاري تحميل الطلبات...</p>
+              </div>
             </div>
           ) : data?.orders.length === 0 ? (
-            <div className="text-center py-12 text-gray-500">
-              No orders found
+            <div className="text-center py-12">
+              <p className="text-muted-foreground">لا توجد طلبات</p>
             </div>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead className="bg-gray-50 border-b">
+                <thead className="bg-primary/5 border-b-2 border-primary/20">
                   <tr>
-                    <th className="text-left p-4 font-medium">Order ID</th>
-                    <th className="text-left p-4 font-medium">Customer</th>
-                    <th className="text-left p-4 font-medium">Order Date</th>
-                    <th className="text-left p-4 font-medium">Total</th>
-                    <th className="text-left p-4 font-medium">Status</th>
-                    <th className="text-left p-4 font-medium">Actions</th>
+                    <th className="text-left p-4 font-semibold text-primary">رقم الطلب</th>
+                    <th className="text-left p-4 font-semibold text-primary">العميل</th>
+                    <th className="text-left p-4 font-semibold text-primary">تاريخ الطلب</th>
+                    <th className="text-left p-4 font-semibold text-primary">الإجمالي</th>
+                    <th className="text-left p-4 font-semibold text-primary">الحالة</th>
+                    <th className="text-left p-4 font-semibold text-primary">الإجراءات</th>
                   </tr>
                 </thead>
                 <tbody>
                   {data?.orders.map((order) => (
-                    <tr key={order.CustOrderID} className="border-b hover:bg-gray-50">
-                      <td className="p-4">#{order.CustOrderID}</td>
+                    <tr key={order.CustOrderID} className="border-b hover:bg-primary/5 transition-colors">
+                      <td className="p-4 font-semibold">#{order.CustOrderID}</td>
                       <td className="p-4">
                         <p className="font-medium">{order.FirstName} {order.LastName}</p>
-                        <p className="text-sm text-gray-500">@{order.Username}</p>
+                        <p className="text-sm text-muted-foreground">@{order.Username}</p>
                       </td>
                       <td className="p-4">
-                        {new Date(order.OrderDate).toLocaleDateString('en-US', {
+                        {new Date(order.OrderDate).toLocaleDateString('ar-SA', {
                           year: 'numeric',
                           month: 'short',
                           day: 'numeric',
                         })}
                       </td>
-                      <td className="p-4 font-semibold">${order.TotalAmount.toFixed(2)}</td>
+                      <td className="p-4 font-bold text-primary">{order.TotalAmount.toFixed(2)} ر.س</td>
                       <td className="p-4">
-                        <Badge variant="success">{order.Status}</Badge>
+                        <Badge className="bg-green-100 text-green-700 hover:bg-green-100">{order.Status}</Badge>
                       </td>
                       <td className="p-4">
-                        <Button variant="ghost" size="icon" onClick={() => setSelectedOrder(order)}>
-                          <Eye className="h-4 w-4" />
+                        <Button variant="ghost" size="icon" onClick={() => setSelectedOrder(order)} className="hover:bg-primary/10">
+                          <Eye className="h-4 w-4 text-primary" />
                         </Button>
                       </td>
                     </tr>

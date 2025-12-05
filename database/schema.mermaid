@@ -1,0 +1,127 @@
+erDiagram
+    %% Online Bookstore Database Schema
+    %% Use in GitHub, Markdown viewers, or at https://mermaid.live
+
+    Users ||--o{ RefreshTokens : "has"
+    Users ||--|| ShoppingCarts : "owns"
+    Users ||--o{ CustomerOrders : "places"
+    
+    Publishers ||--o{ Books : "publishes"
+    Publishers ||--o{ PublisherOrders : "receives"
+    
+    Categories ||--o{ Books : "categorizes"
+    
+    Books ||--o{ BookAuthors : "written-by"
+    Books ||--o{ CartItems : "in"
+    Books ||--o{ CustomerOrderItems : "sold-in"
+    Books ||--o{ PublisherOrderItems : "ordered-in"
+    
+    Authors ||--o{ BookAuthors : "writes"
+    
+    ShoppingCarts ||--o{ CartItems : "contains"
+    
+    CustomerOrders ||--o{ CustomerOrderItems : "includes"
+    
+    PublisherOrders ||--o{ PublisherOrderItems : "includes"
+
+    Users {
+        int UserID PK "Auto-increment"
+        nvarchar Username "Unique, login name"
+        nvarchar PasswordHash "Hashed password"
+        nvarchar Role "Admin or Customer"
+        nvarchar FirstName
+        nvarchar LastName
+        nvarchar Email "Unique"
+        nvarchar Phone
+        nvarchar ShippingAddress
+        datetime CreatedAt
+    }
+
+    RefreshTokens {
+        int TokenID PK "Auto-increment"
+        int UserID FK "References Users"
+        nvarchar Token "JWT token"
+        datetime ExpiresAt
+        datetime CreatedAt
+        bit IsRevoked
+    }
+
+    Publishers {
+        int PublisherID PK "Auto-increment"
+        nvarchar Name
+        nvarchar Address
+        nvarchar Phone
+    }
+
+    Categories {
+        int CategoryID PK "Auto-increment"
+        nvarchar CategoryName "Science, Art, Religion, History, Geography"
+    }
+
+    Books {
+        nvarchar ISBN PK "International Standard Book Number"
+        nvarchar Title
+        int PublisherID FK "References Publishers"
+        int PublicationYear
+        decimal SellingPrice "Customer price"
+        int CategoryID FK "References Categories"
+        int QuantityInStock "Current inventory"
+        int ReorderThreshold "Auto-reorder trigger point"
+    }
+
+    Authors {
+        int AuthorID PK "Auto-increment"
+        nvarchar Name
+    }
+
+    BookAuthors {
+        nvarchar ISBN PK,FK "References Books"
+        int AuthorID PK,FK "References Authors"
+    }
+
+    PublisherOrders {
+        int PubOrderID PK "Auto-increment"
+        int PublisherID FK "References Publishers"
+        datetime OrderDate
+        nvarchar Status "Pending, Confirmed, Cancelled"
+        decimal TotalAmount
+    }
+
+    PublisherOrderItems {
+        int PubOrderItemID PK "Auto-increment"
+        int PubOrderID FK "References PublisherOrders"
+        nvarchar ISBN FK "References Books"
+        int Quantity "Must be greater than 0"
+        decimal UnitPrice
+    }
+
+    CustomerOrders {
+        int CustOrderID PK "Auto-increment"
+        int UserID FK "References Users"
+        datetime OrderDate
+        decimal TotalAmount
+        nvarchar CreditCardLast4 "Last 4 digits"
+        date CreditCardExpiry
+        nvarchar Status
+    }
+
+    CustomerOrderItems {
+        int CustOrderItemID PK "Auto-increment"
+        int CustOrderID FK "References CustomerOrders"
+        nvarchar ISBN FK "References Books"
+        int Quantity "Must be greater than 0"
+        decimal UnitPrice "Price at purchase"
+    }
+
+    ShoppingCarts {
+        int CartID PK "Auto-increment"
+        int UserID FK "Unique, References Users"
+        datetime CreatedAt
+    }
+
+    CartItems {
+        int CartItemID PK "Auto-increment"
+        int CartID FK "References ShoppingCarts"
+        nvarchar ISBN FK "References Books"
+        int Quantity "Must be greater than 0"
+    }

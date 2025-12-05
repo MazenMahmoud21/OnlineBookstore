@@ -84,19 +84,22 @@ function BooksContent() {
   return (
     <>
       <Header />
-      <main className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-8">Browse Books</h1>
+      <main className="container mx-auto px-4 py-8 pattern-bg min-h-screen">
+        <div className="text-center mb-10 animate-fade-in">
+          <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-green-800 to-green-600 bg-clip-text text-transparent mb-3">مكتبتنا الرقمية</h1>
+          <p className="text-gray-600 text-lg">استكشف آلاف الكتب في مختلف المجالات</p>
+        </div>
         
         {/* Search and Filters */}
-        <form onSubmit={handleSearch} className="flex flex-col md:flex-row gap-4 mb-8">
+        <form onSubmit={handleSearch} className="flex flex-col md:flex-row gap-4 mb-10 max-w-4xl mx-auto">
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-green-600" />
             <Input
               type="text"
-              placeholder="Search by title or ISBN..."
+              placeholder="ابحث بالعنوان أو رقم ISBN..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="pl-10"
+              className="pl-10 h-12 border-gray-300 focus:border-green-500 focus:ring-green-500"
             />
           </div>
           <Select
@@ -106,24 +109,26 @@ function BooksContent() {
               setPage(1);
             }}
             options={[
-              { value: '', label: 'All Categories' },
+              { value: '', label: 'جميع الفئات' },
               ...(categories?.map((c) => ({ value: c.CategoryName, label: c.CategoryName })) || []),
             ]}
-            className="w-full md:w-48"
+            className="w-full md:w-48 h-12"
           />
-          <Button type="submit" className="bg-blue-600 hover:bg-blue-700">
-            Search
+          <Button type="submit" className="h-12 px-8 bg-gradient-to-r from-green-700 to-green-600 hover:from-green-800 hover:to-green-700 shadow-lg">
+            <Search className="mr-2 h-5 w-5" />
+            بحث
           </Button>
         </form>
 
         {/* Results */}
         {isLoading ? (
-          <div className="flex justify-center py-12">
-            <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+          <div className="flex flex-col items-center justify-center py-20">
+            <Loader2 className="h-12 w-12 animate-spin text-green-600 mb-4" />
+            <p className="text-gray-600">جاري تحميل الكتب...</p>
           </div>
         ) : booksData?.books?.length > 0 ? (
           <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 animate-fade-in">
               {booksData.books.map((book: Book) => (
                 <BookCard
                   key={book.ISBN}
@@ -136,31 +141,34 @@ function BooksContent() {
 
             {/* Pagination */}
             {booksData.pagination && booksData.pagination.totalPages > 1 && (
-              <div className="flex justify-center gap-2 mt-8">
+              <div className="flex justify-center items-center gap-3 mt-12">
                 <Button
                   variant="outline"
                   onClick={() => setPage((p) => Math.max(1, p - 1))}
                   disabled={page === 1}
+                  className="border-green-600 text-green-700 hover:bg-green-50"
                 >
-                  Previous
+                  السابق
                 </Button>
-                <span className="flex items-center px-4">
-                  Page {page} of {booksData.pagination.totalPages}
+                <span className="flex items-center px-4 py-2 bg-green-50 rounded-lg font-medium text-green-800">
+                  صفحة {page} من {booksData.pagination.totalPages}
                 </span>
                 <Button
                   variant="outline"
                   onClick={() => setPage((p) => p + 1)}
                   disabled={page >= booksData.pagination.totalPages}
+                  className="border-green-600 text-green-700 hover:bg-green-50"
                 >
-                  Next
+                  التالي
                 </Button>
               </div>
             )}
           </>
         ) : (
-          <div className="text-center py-12 text-gray-500">
-            <p className="text-lg">No books found</p>
-            <p className="text-sm mt-2">Try adjusting your search or filters</p>
+          <div className="text-center py-20 animate-scale-in">
+            <Search className="h-20 w-20 mx-auto text-gray-300 mb-4" />
+            <p className="text-xl font-semibold text-gray-700 mb-2">لم يتم العثور على كتب</p>
+            <p className="text-gray-500">جرب تعديل البحث أو الفلاتر</p>
           </div>
         )}
       </main>
@@ -174,8 +182,9 @@ export default function BooksPage() {
       <>
         <Header />
         <main className="container mx-auto px-4 py-8">
-          <div className="flex justify-center py-12">
-            <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+          <div className="flex flex-col items-center justify-center py-20">
+            <Loader2 className="h-12 w-12 animate-spin text-green-600 mb-4" />
+            <p className="text-gray-600">جاري التحميل...</p>
           </div>
         </main>
       </>

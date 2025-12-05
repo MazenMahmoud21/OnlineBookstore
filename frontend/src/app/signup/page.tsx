@@ -12,19 +12,19 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
-import { BookOpen, Loader2 } from 'lucide-react';
+import { BookOpen, Loader2, UserPlus, Sparkles } from 'lucide-react';
 
 const signupSchema = z.object({
-  username: z.string().min(3, 'Username must be at least 3 characters'),
-  password: z.string().min(6, 'Password must be at least 6 characters'),
+  username: z.string().min(3, 'اسم المستخدم يجب أن يكون 3 أحرف على الأقل'),
+  password: z.string().min(6, 'كلمة المرور يجب أن تكون 6 أحرف على الأقل'),
   confirmPassword: z.string(),
-  firstName: z.string().min(1, 'First name is required'),
-  lastName: z.string().min(1, 'Last name is required'),
-  email: z.string().email('Invalid email address'),
+  firstName: z.string().min(1, 'الاسم الأول مطلوب'),
+  lastName: z.string().min(1, 'اسم العائلة مطلوب'),
+  email: z.string().email('البريد الإلكتروني غير صحيح'),
   phone: z.string().optional(),
   shippingAddress: z.string().optional(),
 }).refine((data) => data.password === data.confirmPassword, {
-  message: "Passwords don't match",
+  message: "كلمتا المرور غير متطابقتين",
   path: ['confirmPassword'],
 });
 
@@ -49,10 +49,10 @@ export default function SignupPage() {
     try {
       const { confirmPassword: _, ...signupData } = data;
       await signup(signupData);
-      showToast('Account created successfully!', 'success');
+      showToast('تم إنشاء الحساب بنجاح!', 'success');
       router.push('/books');
     } catch (error: unknown) {
-      const errorMessage = error instanceof Error ? error.message : 'Signup failed';
+      const errorMessage = error instanceof Error ? error.message : 'فشل إنشاء الحساب';
       const axiosError = error as { response?: { data?: { error?: string } } };
       showToast(axiosError.response?.data?.error || errorMessage, 'error');
     } finally {
@@ -61,27 +61,33 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4">
-      <Card className="w-full max-w-md">
-        <CardHeader className="text-center">
-          <Link href="/" className="flex items-center justify-center gap-2 mb-4">
-            <BookOpen className="h-8 w-8 text-blue-600" />
-            <span className="text-2xl font-bold">BookStore</span>
+    <div className="min-h-screen flex items-center justify-center pattern-bg py-12 px-4">
+      <Card className="w-full max-w-2xl shadow-2xl border-none animate-scale-in">
+        <CardHeader className="text-center space-y-4 pb-8">
+          <Link href="/" className="flex items-center justify-center gap-2 mb-2">
+            <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-green-700 to-green-600 flex items-center justify-center shadow-lg">
+              <BookOpen className="h-7 w-7 text-white" />
+            </div>
           </Link>
-          <CardTitle className="text-2xl">Create Account</CardTitle>
-          <CardDescription>
-            Sign up to start shopping for books
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-50 rounded-full mx-auto">
+            <Sparkles className="h-4 w-4 text-green-700" />
+            <span className="text-sm font-medium text-green-800">انضم إلى مكتبة المملكة</span>
+          </div>
+          <CardTitle className="text-3xl font-bold bg-gradient-to-r from-green-800 to-green-600 bg-clip-text text-transparent">إنشاء حساب جديد</CardTitle>
+          <CardDescription className="text-base">
+            سجل الآن لتبدأ رحلة القراءة والمعرفة
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div className="space-y-2">
-                <Label htmlFor="firstName">First Name</Label>
+                <Label htmlFor="firstName" className="text-sm font-medium text-gray-700">الاسم الأول</Label>
                 <Input
                   id="firstName"
                   type="text"
-                  placeholder="John"
+                  placeholder="أحمد"
+                  className="h-11 border-gray-300 focus:border-green-500 focus:ring-green-500"
                   {...register('firstName')}
                 />
                 {errors.firstName && (
@@ -89,11 +95,12 @@ export default function SignupPage() {
                 )}
               </div>
               <div className="space-y-2">
-                <Label htmlFor="lastName">Last Name</Label>
+                <Label htmlFor="lastName" className="text-sm font-medium text-gray-700">اسم العائلة</Label>
                 <Input
                   id="lastName"
                   type="text"
-                  placeholder="Doe"
+                  placeholder="محمد"
+                  className="h-11 border-gray-300 focus:border-green-500 focus:ring-green-500"
                   {...register('lastName')}
                 />
                 {errors.lastName && (
@@ -102,11 +109,12 @@ export default function SignupPage() {
               </div>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="username">Username</Label>
+              <Label htmlFor="username" className="text-sm font-medium text-gray-700">اسم المستخدم</Label>
               <Input
                 id="username"
                 type="text"
-                placeholder="johndoe"
+                placeholder="أحمد_القارئ"
+                className="h-11 border-gray-300 focus:border-green-500 focus:ring-green-500"
                 {...register('username')}
               />
               {errors.username && (
@@ -114,11 +122,12 @@ export default function SignupPage() {
               )}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email" className="text-sm font-medium text-gray-700">البريد الإلكتروني</Label>
               <Input
                 id="email"
                 type="email"
-                placeholder="john@example.com"
+                placeholder="ahmed@example.sa"
+                className="h-11 border-gray-300 focus:border-green-500 focus:ring-green-500"
                 {...register('email')}
               />
               {errors.email && (
@@ -126,68 +135,77 @@ export default function SignupPage() {
               )}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="phone">Phone (Optional)</Label>
+              <Label htmlFor="phone" className="text-sm font-medium text-gray-700">رقم الجوال (اختياري)</Label>
               <Input
                 id="phone"
                 type="tel"
-                placeholder="555-0123"
+                placeholder="05xxxxxxxx"
+                className="h-11 border-gray-300 focus:border-green-500 focus:ring-green-500"
                 {...register('phone')}
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="shippingAddress">Shipping Address (Optional)</Label>
+              <Label htmlFor="shippingAddress" className="text-sm font-medium text-gray-700">عنوان التوصيل (اختياري)</Label>
               <Input
                 id="shippingAddress"
                 type="text"
-                placeholder="123 Main St, City, State"
+                placeholder="الرياض، حي النخيل، شارع الملك فهد"
+                className="h-11 border-gray-300 focus:border-green-500 focus:ring-green-500"
                 {...register('shippingAddress')}
               />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
-                type="password"
-                placeholder="Create a password"
-                {...register('password')}
-              />
-              {errors.password && (
-                <p className="text-sm text-red-500">{errors.password.message}</p>
-              )}
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="confirmPassword">Confirm Password</Label>
-              <Input
-                id="confirmPassword"
-                type="password"
-                placeholder="Confirm your password"
-                {...register('confirmPassword')}
-              />
-              {errors.confirmPassword && (
-                <p className="text-sm text-red-500">{errors.confirmPassword.message}</p>
-              )}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div className="space-y-2">
+                <Label htmlFor="password" className="text-sm font-medium text-gray-700">كلمة المرور</Label>
+                <Input
+                  id="password"
+                  type="password"
+                  placeholder="••••••••"
+                  className="h-11 border-gray-300 focus:border-green-500 focus:ring-green-500"
+                  {...register('password')}
+                />
+                {errors.password && (
+                  <p className="text-sm text-red-500">{errors.password.message}</p>
+                )}
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="confirmPassword" className="text-sm font-medium text-gray-700">تأكيد كلمة المرور</Label>
+                <Input
+                  id="confirmPassword"
+                  type="password"
+                  placeholder="••••••••"
+                  className="h-11 border-gray-300 focus:border-green-500 focus:ring-green-500"
+                  {...register('confirmPassword')}
+                />
+                {errors.confirmPassword && (
+                  <p className="text-sm text-red-500">{errors.confirmPassword.message}</p>
+                )}
+              </div>
             </div>
             <Button 
               type="submit" 
-              className="w-full bg-blue-600 hover:bg-blue-700" 
+              className="w-full h-11 bg-gradient-to-r from-green-700 to-green-600 hover:from-green-800 hover:to-green-700 shadow-lg hover:shadow-xl transition-all duration-300" 
               disabled={isLoading}
             >
               {isLoading ? (
                 <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Creating account...
+                  <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                  جاري إنشاء الحساب...
                 </>
               ) : (
-                'Create Account'
+                <>
+                  <UserPlus className="mr-2 h-5 w-5" />
+                  إنشاء الحساب
+                </>
               )}
             </Button>
           </form>
         </CardContent>
-        <CardFooter className="justify-center">
+        <CardFooter className="justify-center border-t pt-6">
           <p className="text-sm text-gray-600">
-            Already have an account?{' '}
-            <Link href="/login" className="text-blue-600 hover:underline font-medium">
-              Sign in
+            لديك حساب بالفعل؟{' '}
+            <Link href="/login" className="text-green-700 hover:text-green-800 font-bold hover:underline transition-colors">
+              تسجيل الدخول
             </Link>
           </p>
         </CardFooter>

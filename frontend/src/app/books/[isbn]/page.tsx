@@ -11,7 +11,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { useToast } from '@/components/ui/toast';
 import { useAuth } from '@/contexts/AuthContext';
 import { Book } from '@/types';
-import { ShoppingCart, Loader2, ArrowLeft, Minus, Plus } from 'lucide-react';
+import { ShoppingCart, Loader2, ArrowLeft, Minus, Plus, BookMarked, Star, CheckCircle, XCircle, Package } from 'lucide-react';
 
 export default function BookDetailPage() {
   const params = useParams();
@@ -32,22 +32,22 @@ export default function BookDetailPage() {
 
   const handleAddToCart = async () => {
     if (!isAuthenticated) {
-      showToast('Please login to add items to cart', 'warning');
+      showToast('يرجى تسجيل الدخول لإضافة العناصر للسلة', 'warning');
       router.push('/login');
       return;
     }
     if (user?.Role !== 'Customer') {
-      showToast('Only customers can add items to cart', 'warning');
+      showToast('العملاء فقط يمكنهم الإضافة للسلة', 'warning');
       return;
     }
     
     setIsAddingToCart(true);
     try {
       await api.post('/cart/items', { isbn, quantity });
-      showToast('Item added to cart!', 'success');
+      showToast('تمت الإضافة للسلة بنجاح!', 'success');
     } catch (error: unknown) {
       const axiosError = error as { response?: { data?: { error?: string } } };
-      showToast(axiosError.response?.data?.error || 'Failed to add to cart', 'error');
+      showToast(axiosError.response?.data?.error || 'فشل الإضافة للسلة', 'error');
     } finally {
       setIsAddingToCart(false);
     }
@@ -55,29 +55,34 @@ export default function BookDetailPage() {
 
   if (isLoading) {
     return (
-      <>
+      <div className="min-h-screen pattern-bg">
         <Header />
         <div className="flex justify-center items-center min-h-[60vh]">
-          <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+          <div className="text-center">
+            <Loader2 className="h-12 w-12 animate-spin text-primary mx-auto mb-3" />
+            <p className="text-muted-foreground">جاري تحميل تفاصيل الكتاب...</p>
+          </div>
         </div>
-      </>
+      </div>
     );
   }
 
   if (error || !book) {
     return (
-      <>
+      <div className="min-h-screen pattern-bg">
         <Header />
         <div className="container mx-auto px-4 py-8">
-          <div className="text-center">
-            <h1 className="text-2xl font-bold text-gray-800">Book not found</h1>
-            <Button onClick={() => router.back()} className="mt-4">
+          <div className="text-center py-16">
+            <BookMarked className="h-20 w-20 text-muted-foreground mx-auto mb-4" />
+            <h1 className="text-3xl font-bold mb-4">الكتاب غير موجود</h1>
+            <p className="text-muted-foreground mb-6">عذراً، لم نتمكن من العثور على هذا الكتاب</p>
+            <Button onClick={() => router.back()} className="saudi-gradient">
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Go Back
+              العودة
             </Button>
           </div>
         </div>
-      </>
+      </div>
     );
   }
 
@@ -86,54 +91,67 @@ export default function BookDetailPage() {
     : book.Authors || 'Unknown Author';
 
   return (
-    <>
+    <div className="min-h-screen pattern-bg">
       <Header />
-      <main className="container mx-auto px-4 py-8">
-        <Button variant="ghost" onClick={() => router.back()} className="mb-6">
+      <main className="container mx-auto px-4 py-8 animate-fade-in">
+        <Button variant="ghost" onClick={() => router.back()} className="mb-6 hover:bg-primary/10">
           <ArrowLeft className="h-4 w-4 mr-2" />
-          Back to Books
+          العودة للمكتبة
         </Button>
 
         <div className="grid md:grid-cols-2 gap-8">
           {/* Book Image */}
-          <div className="aspect-[3/4] bg-gradient-to-br from-blue-100 to-blue-50 rounded-lg flex items-center justify-center">
-            <span className="text-8xl">📚</span>
+          <div className="aspect-[3/4] saudi-gradient-soft rounded-2xl flex items-center justify-center shadow-xl border-2 border-primary/20">
+            <BookMarked className="h-32 w-32 text-primary" />
           </div>
 
           {/* Book Details */}
           <div>
-            <Badge variant="secondary" className="mb-4">{book.CategoryName}</Badge>
-            <h1 className="text-3xl font-bold mb-4">{book.Title}</h1>
-            <p className="text-lg text-gray-600 mb-4">by {authors}</p>
+            <Badge variant="secondary" className="mb-4 bg-secondary/20 text-secondary border-secondary/30">
+              {book.CategoryName}
+            </Badge>
+            <h1 className="text-4xl font-bold mb-4 text-foreground">{book.Title}</h1>
+            <p className="text-lg text-muted-foreground mb-6 flex items-center gap-2">
+              <Star className="h-5 w-5 text-secondary fill-secondary" />
+              {authors}
+            </p>
             
-            <div className="flex items-center gap-4 mb-6">
-              <span className="text-3xl font-bold text-blue-600">${book.SellingPrice.toFixed(2)}</span>
+            <div className="flex items-center gap-4 mb-8">
+              <span className="text-4xl font-bold saudi-gradient-text">{book.SellingPrice.toFixed(2)} ر.س</span>
               {book.QuantityInStock > 0 ? (
-                <Badge variant="success">In Stock ({book.QuantityInStock} available)</Badge>
+                <Badge className="bg-green-100 text-green-700 hover:bg-green-100 flex items-center gap-1">
+                  <CheckCircle className="h-3 w-3" />
+                  متوفر ({book.QuantityInStock})
+                </Badge>
               ) : (
-                <Badge variant="destructive">Out of Stock</Badge>
+                <Badge variant="destructive" className="flex items-center gap-1">
+                  <XCircle className="h-3 w-3" />
+                  غير متوفر
+                </Badge>
               )}
             </div>
 
             {/* Add to Cart */}
             {(user?.Role === 'Customer' || !isAuthenticated) && (
-              <Card className="mb-6">
-                <CardContent className="p-4">
+              <Card className="mb-6 border-2 border-primary/20 shadow-lg">
+                <CardContent className="p-6">
                   <div className="flex items-center gap-4 mb-4">
-                    <span className="text-sm font-medium">Quantity:</span>
+                    <span className="text-sm font-semibold text-muted-foreground">الكمية:</span>
                     <div className="flex items-center gap-2">
                       <Button
                         variant="outline"
                         size="icon"
+                        className="border-primary/30 hover:bg-primary/10 hover:border-primary"
                         onClick={() => setQuantity(q => Math.max(1, q - 1))}
                         disabled={quantity <= 1}
                       >
                         <Minus className="h-4 w-4" />
                       </Button>
-                      <span className="w-12 text-center font-medium">{quantity}</span>
+                      <span className="w-14 text-center font-bold text-lg">{quantity}</span>
                       <Button
                         variant="outline"
                         size="icon"
+                        className="border-primary/30 hover:bg-primary/10 hover:border-primary"
                         onClick={() => setQuantity(q => Math.min(book.QuantityInStock, q + 1))}
                         disabled={quantity >= book.QuantityInStock}
                       >
@@ -142,19 +160,19 @@ export default function BookDetailPage() {
                     </div>
                   </div>
                   <Button
-                    className="w-full bg-blue-600 hover:bg-blue-700"
+                    className="w-full saudi-gradient hover:opacity-90 text-lg py-6"
                     onClick={handleAddToCart}
                     disabled={book.QuantityInStock <= 0 || isAddingToCart}
                   >
                     {isAddingToCart ? (
                       <>
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Adding...
+                        <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                        جاري الإضافة...
                       </>
                     ) : (
                       <>
-                        <ShoppingCart className="mr-2 h-4 w-4" />
-                        Add to Cart
+                        <ShoppingCart className="mr-2 h-5 w-5" />
+                        أضف للسلة
                       </>
                     )}
                   </Button>
@@ -163,28 +181,43 @@ export default function BookDetailPage() {
             )}
 
             {/* Book Info */}
-            <div className="space-y-4">
-              <div>
-                <h3 className="font-semibold mb-2">Book Details</h3>
-                <dl className="grid grid-cols-2 gap-2 text-sm">
-                  <dt className="text-gray-600">ISBN</dt>
-                  <dd>{book.ISBN}</dd>
-                  <dt className="text-gray-600">Publisher</dt>
-                  <dd>{book.PublisherName}</dd>
+            <Card className="border-2 border-primary/10">
+              <CardHeader className="bg-primary/5">
+                <h3 className="font-bold text-xl flex items-center gap-2">
+                  <Package className="h-5 w-5 text-primary" />
+                  تفاصيل الكتاب
+                </h3>
+              </CardHeader>
+              <CardContent className="p-6">
+                <dl className="space-y-4">
+                  <div className="flex justify-between items-center pb-3 border-b border-primary/10">
+                    <dt className="text-muted-foreground font-medium">رقم ISBN</dt>
+                    <dd className="font-semibold">{book.ISBN}</dd>
+                  </div>
+                  <div className="flex justify-between items-center pb-3 border-b border-primary/10">
+                    <dt className="text-muted-foreground font-medium">الناشر</dt>
+                    <dd className="font-semibold">{book.PublisherName}</dd>
+                  </div>
                   {book.PublicationYear && (
-                    <>
-                      <dt className="text-gray-600">Publication Year</dt>
-                      <dd>{book.PublicationYear}</dd>
-                    </>
+                    <div className="flex justify-between items-center pb-3 border-b border-primary/10">
+                      <dt className="text-muted-foreground font-medium">سنة النشر</dt>
+                      <dd className="font-semibold">{book.PublicationYear}</dd>
+                    </div>
                   )}
-                  <dt className="text-gray-600">Category</dt>
-                  <dd>{book.CategoryName}</dd>
+                  <div className="flex justify-between items-center">
+                    <dt className="text-muted-foreground font-medium">التصنيف</dt>
+                    <dd>
+                      <Badge className="bg-secondary/20 text-secondary border-secondary/30">
+                        {book.CategoryName}
+                      </Badge>
+                    </dd>
+                  </div>
                 </dl>
-              </div>
-            </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </main>
-    </>
+    </div>
   );
 }

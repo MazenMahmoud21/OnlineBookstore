@@ -119,12 +119,12 @@ export default function AdminBooksPage() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin-books'] });
-      showToast('Book created successfully!', 'success');
+      showToast('تمت إضافة الكتاب بنجاح!', 'success');
       handleCloseModal();
     },
     onError: (error: unknown) => {
       const axiosError = error as { response?: { data?: { error?: string } } };
-      showToast(axiosError.response?.data?.error || 'Failed to create book', 'error');
+      showToast(axiosError.response?.data?.error || 'فشل إضافة الكتاب', 'error');
     },
   });
 
@@ -145,7 +145,7 @@ export default function AdminBooksPage() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin-books'] });
-      showToast('Book updated successfully!', 'success');
+      showToast('تم تحديث الكتاب بنجاح!', 'success');
       handleCloseModal();
     },
     onError: (error: unknown) => {
@@ -202,48 +202,51 @@ export default function AdminBooksPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 animate-fade-in">
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold">Manage Books</h1>
-        <Button onClick={() => handleOpenModal()} className="bg-blue-600 hover:bg-blue-700">
+        <h1 className="text-4xl font-bold saudi-gradient-text">إدارة الكتب</h1>
+        <Button onClick={() => handleOpenModal()} className="saudi-gradient hover:opacity-90">
           <Plus className="h-4 w-4 mr-2" />
-          Add Book
+          إضافة كتاب
         </Button>
       </div>
 
       {/* Search */}
       <div className="relative max-w-md">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-primary" />
         <Input
           type="text"
-          placeholder="Search books..."
+          placeholder="ابحث عن الكتب..."
           value={search}
           onChange={(e) => {
             setSearch(e.target.value);
             setPage(1);
           }}
-          className="pl-10"
+          className="pl-10 border-primary/30 focus:border-primary"
         />
       </div>
 
       {/* Books Table */}
-      <Card>
+      <Card className="border-2 border-primary/20">
         <CardContent className="p-0">
           {isLoadingBooks ? (
             <div className="flex justify-center py-12">
-              <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+              <div className="text-center">
+                <Loader2 className="h-12 w-12 animate-spin text-primary mx-auto mb-3" />
+                <p className="text-muted-foreground">جاري تحميل الكتب...</p>
+              </div>
             </div>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead className="bg-gray-50 border-b">
+                <thead className="bg-primary/5 border-b-2 border-primary/20">
                   <tr>
-                    <th className="text-left p-4 font-medium">ISBN</th>
-                    <th className="text-left p-4 font-medium">Title</th>
-                    <th className="text-left p-4 font-medium">Category</th>
-                    <th className="text-left p-4 font-medium">Price</th>
-                    <th className="text-left p-4 font-medium">Stock</th>
-                    <th className="text-left p-4 font-medium">Actions</th>
+                    <th className="text-left p-4 font-semibold text-primary">ISBN</th>
+                    <th className="text-left p-4 font-semibold text-primary">العنوان</th>
+                    <th className="text-left p-4 font-semibold text-primary">التصنيف</th>
+                    <th className="text-left p-4 font-semibold text-primary">السعر</th>
+                    <th className="text-left p-4 font-semibold text-primary">المخزون</th>
+                    <th className="text-left p-4 font-semibold text-primary">الإجراءات</th>
                   </tr>
                 </thead>
                 <tbody>

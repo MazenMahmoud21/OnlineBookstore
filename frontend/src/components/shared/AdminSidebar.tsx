@@ -14,12 +14,12 @@ import {
 } from 'lucide-react';
 
 const navItems = [
-  { href: '/admin', icon: LayoutDashboard, label: 'Dashboard', exact: true },
-  { href: '/admin/books', icon: BookOpen, label: 'Books' },
-  { href: '/admin/publishers', icon: Users, label: 'Publishers' },
-  { href: '/admin/publisher-orders', icon: Truck, label: 'Publisher Orders' },
-  { href: '/admin/orders', icon: Package, label: 'Customer Orders' },
-  { href: '/admin/reports', icon: BarChart3, label: 'Reports' },
+  { href: '/admin', icon: LayoutDashboard, label: 'لوحة التحكم', exact: true },
+  { href: '/admin/books', icon: BookOpen, label: 'الكتب' },
+  { href: '/admin/publishers', icon: Users, label: 'الناشرين' },
+  { href: '/admin/publisher-orders', icon: Truck, label: 'طلبات الناشرين' },
+  { href: '/admin/orders', icon: Package, label: 'طلبات العملاء' },
+  { href: '/admin/reports', icon: BarChart3, label: 'التقارير' },
 ];
 
 export function AdminSidebar() {
@@ -33,19 +33,19 @@ export function AdminSidebar() {
   };
 
   return (
-    <aside className="fixed left-0 top-16 z-30 h-[calc(100vh-4rem)] w-64 border-r bg-white hidden lg:block">
+    <aside className="fixed left-0 top-16 z-30 h-[calc(100vh-4rem)] w-64 border-r-2 border-primary/20 bg-gradient-to-b from-white to-primary/5 hidden lg:block">
       <div className="flex flex-col gap-2 p-4">
-        <h2 className="text-lg font-semibold px-2 py-4">Admin Panel</h2>
+        <h2 className="text-xl font-bold px-2 py-4 saudi-gradient-text">لوحة الإدارة</h2>
         <nav className="flex flex-col gap-1">
           {navItems.map((item) => (
             <Link
               key={item.href}
               href={item.href}
               className={cn(
-                "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-gray-100",
+                "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all hover:shadow-md",
                 isActive(item.href, item.exact)
-                  ? "bg-primary/10 text-primary"
-                  : "text-gray-600"
+                  ? "saudi-gradient text-white shadow-lg"
+                  : "text-gray-600 hover:bg-primary/10"
               )}
             >
               <item.icon className="h-5 w-5" />

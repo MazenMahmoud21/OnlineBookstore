@@ -53,12 +53,12 @@ export default function PublishersPage() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['publishers'] });
-      showToast('Publisher created successfully!', 'success');
+      showToast('تمت إضافة الناشر بنجاح!', 'success');
       handleCloseModal();
     },
     onError: (error: unknown) => {
       const axiosError = error as { response?: { data?: { error?: string } } };
-      showToast(axiosError.response?.data?.error || 'Failed to create publisher', 'error');
+      showToast(axiosError.response?.data?.error || 'فشل إضافة الناشر', 'error');
     },
   });
 
@@ -68,12 +68,12 @@ export default function PublishersPage() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['publishers'] });
-      showToast('Publisher updated successfully!', 'success');
+      showToast('تم تحديث الناشر بنجاح!', 'success');
       handleCloseModal();
     },
     onError: (error: unknown) => {
       const axiosError = error as { response?: { data?: { error?: string } } };
-      showToast(axiosError.response?.data?.error || 'Failed to update publisher', 'error');
+      showToast(axiosError.response?.data?.error || 'فشل تحديث الناشر', 'error');
     },
   });
 
@@ -83,11 +83,11 @@ export default function PublishersPage() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['publishers'] });
-      showToast('Publisher deleted successfully!', 'success');
+      showToast('تم حذف الناشر بنجاح!', 'success');
     },
     onError: (error: unknown) => {
       const axiosError = error as { response?: { data?: { error?: string } } };
-      showToast(axiosError.response?.data?.error || 'Failed to delete publisher', 'error');
+      showToast(axiosError.response?.data?.error || 'فشل حذف الناشر', 'error');
     },
   });
 
@@ -119,53 +119,57 @@ export default function PublishersPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 animate-fade-in">
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold">Manage Publishers</h1>
-        <Button onClick={() => handleOpenModal()} className="bg-blue-600 hover:bg-blue-700">
+        <h1 className="text-4xl font-bold saudi-gradient-text">إدارة الناشرين</h1>
+        <Button onClick={() => handleOpenModal()} className="saudi-gradient hover:opacity-90">
           <Plus className="h-4 w-4 mr-2" />
-          Add Publisher
+          إضافة ناشر
         </Button>
       </div>
 
-      <Card>
+      <Card className="border-2 border-primary/20">
         <CardContent className="p-0">
           {isLoading ? (
             <div className="flex justify-center py-12">
-              <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+              <div className="text-center">
+                <Loader2 className="h-12 w-12 animate-spin text-primary mx-auto mb-3" />
+                <p className="text-muted-foreground">جاري تحميل الناشرين...</p>
+              </div>
             </div>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead className="bg-gray-50 border-b">
+                <thead className="bg-primary/5 border-b-2 border-primary/20">
                   <tr>
-                    <th className="text-left p-4 font-medium">ID</th>
-                    <th className="text-left p-4 font-medium">Name</th>
-                    <th className="text-left p-4 font-medium">Address</th>
-                    <th className="text-left p-4 font-medium">Phone</th>
-                    <th className="text-left p-4 font-medium">Actions</th>
+                    <th className="text-left p-4 font-semibold text-primary">الرقم</th>
+                    <th className="text-left p-4 font-semibold text-primary">الاسم</th>
+                    <th className="text-left p-4 font-semibold text-primary">العنوان</th>
+                    <th className="text-left p-4 font-semibold text-primary">الهاتف</th>
+                    <th className="text-left p-4 font-semibold text-primary">الإجراءات</th>
                   </tr>
                 </thead>
                 <tbody>
                   {publishers?.map((publisher) => (
-                    <tr key={publisher.PublisherID} className="border-b hover:bg-gray-50">
-                      <td className="p-4">{publisher.PublisherID}</td>
+                    <tr key={publisher.PublisherID} className="border-b hover:bg-primary/5 transition-colors">
+                      <td className="p-4 font-semibold">{publisher.PublisherID}</td>
                       <td className="p-4 font-medium">{publisher.Name}</td>
-                      <td className="p-4 text-gray-600">{publisher.Address || '-'}</td>
+                      <td className="p-4 text-muted-foreground">{publisher.Address || '-'}</td>
                       <td className="p-4">{publisher.Phone || '-'}</td>
                       <td className="p-4">
                         <div className="flex gap-2">
-                          <Button variant="ghost" size="icon" onClick={() => handleOpenModal(publisher)}>
-                            <Edit className="h-4 w-4" />
+                          <Button variant="ghost" size="icon" onClick={() => handleOpenModal(publisher)} className="hover:bg-primary/10">
+                            <Edit className="h-4 w-4 text-primary" />
                           </Button>
                           <Button
                             variant="ghost"
                             size="icon"
                             onClick={() => {
-                              if (confirm('Are you sure you want to delete this publisher?')) {
+                              if (confirm('هل أنت متأكد من حذف هذا الناشر؟')) {
                                 deletePublisher.mutate(publisher.PublisherID);
                               }
                             }}
+                            className="hover:bg-red-50"
                           >
                             <Trash2 className="h-4 w-4 text-red-500" />
                           </Button>
