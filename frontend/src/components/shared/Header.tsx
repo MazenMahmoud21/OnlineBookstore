@@ -4,14 +4,23 @@ import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
-import { ShoppingCart, BookOpen, LogOut, Menu, X, UserCircle, Package, LayoutDashboard, Info } from 'lucide-react';
-import { useState } from 'react';
+import { ShoppingCart, BookOpen, LogOut, Menu, X, UserCircle, Package, LayoutDashboard, Info, Sparkles, ChevronDown } from 'lucide-react';
+import { useState, useEffect } from 'react';
 
 export function Header() {
   const { user, isAuthenticated, logout } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const handleLogout = async () => {
     await logout();
@@ -21,81 +30,119 @@ export function Header() {
   const isActive = (path: string) => pathname === path;
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b glass-effect shadow-sm">
+    <header className={`sticky top-0 z-50 w-full transition-all duration-500 ${
+      scrolled 
+        ? 'bg-white/95 backdrop-blur-xl shadow-lg border-b border-green-100' 
+        : 'bg-white/80 backdrop-blur-md shadow-sm'
+    }`}>
       <div className="container mx-auto px-4">
-        <div className="flex h-16 items-center justify-between">
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 group">
-            <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-green-700 to-green-600 flex items-center justify-center shadow-md group-hover:shadow-lg transition-shadow">
-              <BookOpen className="h-6 w-6 text-white" />
+        <div className="flex h-18 items-center justify-between py-3">
+          {/* Logo with enhanced design */}
+          <Link href="/" className="flex items-center gap-3 group">
+            <div className="relative">
+              <div className="h-11 w-11 rounded-xl bg-gradient-to-br from-green-600 to-green-700 flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-105">
+                <BookOpen className="h-6 w-6 text-white" />
+              </div>
+              <div className="absolute -top-1 -right-1 h-4 w-4 bg-gradient-to-br from-yellow-400 to-yellow-500 rounded-full flex items-center justify-center shadow-md">
+                <Sparkles className="h-2.5 w-2.5 text-white" />
+              </div>
             </div>
-            <span className="text-xl font-bold bg-gradient-to-r from-green-800 to-green-600 bg-clip-text text-transparent">مكتبة المملكة</span>
+            <div className="flex flex-col">
+              <span className="text-xl font-bold text-gradient">مكتبة المملكة</span>
+              <span className="text-xs text-gray-500 font-medium -mt-0.5">المكتبة الرقمية</span>
+            </div>
           </Link>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-6">
-            <Link
-              href="/books"
-              className={`text-sm font-medium transition-all hover:text-green-700 flex items-center gap-2 ${
-                isActive('/books') ? 'text-green-700 font-bold' : 'text-gray-600'
-              }`}
-            >
-              <BookOpen className="h-4 w-4" />
-              المكتبة
-            </Link>
-            <Link
-              href="/about"
-              className={`text-sm font-medium transition-all hover:text-green-700 flex items-center gap-2 ${
-                isActive('/about') ? 'text-green-700 font-bold' : 'text-gray-600'
-              }`}
-            >
-              <Info className="h-4 w-4" />
-              من نحن
-            </Link>
+          {/* Desktop Navigation with enhanced styling */}
+          <nav className="hidden md:flex items-center gap-1">
+            {[
+              { href: '/books', icon: BookOpen, label: 'المكتبة' },
+              { href: '/about', icon: Info, label: 'من نحن' },
+            ].map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`relative px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 flex items-center gap-2 group ${
+                  isActive(item.href) 
+                    ? 'text-green-700 bg-green-50' 
+                    : 'text-gray-600 hover:text-green-700 hover:bg-green-50/50'
+                }`}
+              >
+                <item.icon className={`h-4 w-4 transition-transform duration-300 ${isActive(item.href) ? 'text-green-600' : 'group-hover:scale-110'}`} />
+                {item.label}
+                {isActive(item.href) && (
+                  <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-gradient-to-r from-green-500 to-green-600 rounded-full"></span>
+                )}
+              </Link>
+            ))}
+            
             {isAuthenticated && (
               <>
                 <Link
                   href="/cart"
-                  className={`text-sm font-medium transition-all hover:text-green-700 flex items-center gap-2 ${
-                    isActive('/cart') ? 'text-green-700 font-bold' : 'text-gray-600'
+                  className={`relative px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 flex items-center gap-2 group ${
+                    isActive('/cart') 
+                      ? 'text-green-700 bg-green-50' 
+                      : 'text-gray-600 hover:text-green-700 hover:bg-green-50/50'
                   }`}
                 >
-                  <ShoppingCart className="h-4 w-4" />
+                  <div className="relative">
+                    <ShoppingCart className={`h-4 w-4 transition-transform duration-300 ${isActive('/cart') ? 'text-green-600' : 'group-hover:scale-110'}`} />
+                  </div>
                   السلة
+                  {isActive('/cart') && (
+                    <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-gradient-to-r from-green-500 to-green-600 rounded-full"></span>
+                  )}
                 </Link>
                 <Link
                   href="/orders"
-                  className={`text-sm font-medium transition-all hover:text-green-700 flex items-center gap-2 ${
-                    isActive('/orders') ? 'text-green-700 font-bold' : 'text-gray-600'
+                  className={`relative px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 flex items-center gap-2 group ${
+                    isActive('/orders') 
+                      ? 'text-green-700 bg-green-50' 
+                      : 'text-gray-600 hover:text-green-700 hover:bg-green-50/50'
                   }`}
                 >
-                  <Package className="h-4 w-4" />
+                  <Package className={`h-4 w-4 transition-transform duration-300 ${isActive('/orders') ? 'text-green-600' : 'group-hover:scale-110'}`} />
                   طلباتي
+                  {isActive('/orders') && (
+                    <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-gradient-to-r from-green-500 to-green-600 rounded-full"></span>
+                  )}
                 </Link>
               </>
             )}
             {isAuthenticated && user?.Role === 'Admin' && (
               <Link
                 href="/admin"
-                className={`text-sm font-medium transition-all hover:text-green-700 flex items-center gap-2 ${
-                  pathname.startsWith('/admin') ? 'text-green-700 font-bold' : 'text-gray-600'
+                className={`relative px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 flex items-center gap-2 group ${
+                  pathname.startsWith('/admin') 
+                    ? 'text-green-700 bg-green-50' 
+                    : 'text-gray-600 hover:text-green-700 hover:bg-green-50/50'
                 }`}
               >
-                <LayoutDashboard className="h-4 w-4" />
+                <LayoutDashboard className={`h-4 w-4 transition-transform duration-300 ${pathname.startsWith('/admin') ? 'text-green-600' : 'group-hover:scale-110'}`} />
                 لوحة الإدارة
+                {pathname.startsWith('/admin') && (
+                  <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-gradient-to-r from-green-500 to-green-600 rounded-full"></span>
+                )}
               </Link>
             )}
           </nav>
 
-          {/* Auth Buttons */}
+          {/* Auth Buttons with enhanced design */}
           <div className="hidden md:flex items-center gap-3">
             {isAuthenticated ? (
               <>
-                <Link href="/profile" className="flex items-center gap-2 text-sm px-3 py-2 rounded-lg hover:bg-green-50 transition-colors">
-                  <UserCircle className="h-5 w-5 text-green-700" />
-                  <span className="font-medium text-gray-700">{user?.FirstName}</span>
+                <Link href="/profile" className="flex items-center gap-2 text-sm px-4 py-2.5 rounded-xl hover:bg-green-50 transition-all duration-300 group">
+                  <div className="h-8 w-8 rounded-full bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center shadow-md group-hover:shadow-lg transition-shadow">
+                    <UserCircle className="h-5 w-5 text-white" />
+                  </div>
+                  <div className="flex flex-col items-start">
+                    <span className="font-semibold text-gray-800 group-hover:text-green-700 transition-colors">{user?.FirstName}</span>
+                    <span className="text-xs text-gray-500">{user?.Role === 'Admin' ? 'مدير' : 'عميل'}</span>
+                  </div>
+                  <ChevronDown className="h-4 w-4 text-gray-400 group-hover:text-green-600 transition-colors" />
                 </Link>
-                <Button variant="ghost" size="sm" onClick={handleLogout} className="text-gray-600 hover:text-green-700 hover:bg-green-50">
+                <Button variant="ghost" size="sm" onClick={handleLogout} className="text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-xl">
                   <LogOut className="h-4 w-4 mr-2" />
                   خروج
                 </Button>
@@ -103,60 +150,68 @@ export function Header() {
             ) : (
               <>
                 <Link href="/login">
-                  <Button variant="ghost" size="sm" className="text-gray-600 hover:text-green-700 hover:bg-green-50">تسجيل دخول</Button>
+                  <Button variant="ghost" size="sm" className="text-gray-600 hover:text-green-700 hover:bg-green-50 rounded-xl font-semibold">تسجيل دخول</Button>
                 </Link>
                 <Link href="/signup">
-                  <Button size="sm" className="bg-gradient-to-r from-green-700 to-green-600 hover:from-green-800 hover:to-green-700 shadow-md">إنشاء حساب</Button>
+                  <Button size="sm" className="shadow-lg hover:shadow-xl rounded-xl">
+                    <Sparkles className="h-4 w-4 mr-2" />
+                    إنشاء حساب
+                  </Button>
                 </Link>
               </>
             )}
           </div>
 
-          {/* Mobile Menu Button */}
+          {/* Mobile Menu Button with animation */}
           <button
-            className="md:hidden p-2 rounded-lg hover:bg-green-50 transition-colors"
+            className="md:hidden p-2.5 rounded-xl hover:bg-green-50 transition-all duration-300 relative"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
-            {mobileMenuOpen ? <X className="h-6 w-6 text-green-700" /> : <Menu className="h-6 w-6 text-green-700" />}
+            <div className="relative w-6 h-6">
+              <Menu className={`h-6 w-6 text-green-700 absolute inset-0 transition-all duration-300 ${mobileMenuOpen ? 'opacity-0 rotate-90 scale-0' : 'opacity-100 rotate-0 scale-100'}`} />
+              <X className={`h-6 w-6 text-green-700 absolute inset-0 transition-all duration-300 ${mobileMenuOpen ? 'opacity-100 rotate-0 scale-100' : 'opacity-0 -rotate-90 scale-0'}`} />
+            </div>
           </button>
         </div>
 
-        {/* Mobile Menu */}
-        {mobileMenuOpen && (
-          <div className="md:hidden py-4 border-t animate-slide-in">
-            <nav className="flex flex-col gap-4">
-              <Link
-                href="/books"
-                className="text-sm font-medium flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-green-50 transition-colors"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                <BookOpen className="h-4 w-4 text-green-700" />
-                <span>المكتبة</span>
-              </Link>
-              <Link
-                href="/about"
-                className="text-sm font-medium flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-green-50 transition-colors"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                <Info className="h-4 w-4 text-green-700" />
-                <span>من نحن</span>
-              </Link>
+        {/* Mobile Menu with enhanced animation */}
+        <div className={`md:hidden overflow-hidden transition-all duration-500 ease-in-out ${mobileMenuOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'}`}>
+          <div className="py-4 border-t border-green-100">
+            <nav className="flex flex-col gap-2">
+              {[
+                { href: '/books', icon: BookOpen, label: 'المكتبة' },
+                { href: '/about', icon: Info, label: 'من نحن' },
+              ].map((item, index) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`text-sm font-semibold flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 ${
+                    isActive(item.href) ? 'bg-green-50 text-green-700' : 'hover:bg-green-50/50 text-gray-700'
+                  }`}
+                  onClick={() => setMobileMenuOpen(false)}
+                  style={{ animationDelay: `${index * 50}ms` }}
+                >
+                  <item.icon className="h-5 w-5 text-green-600" />
+                  <span>{item.label}</span>
+                </Link>
+              ))}
+              
               {isAuthenticated && user?.Role === 'Customer' && (
                 <>
                   <Link
                     href="/cart"
-                    className="text-sm font-medium flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-green-50 transition-colors"
+                    className="text-sm font-semibold flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-green-50 transition-all duration-300"
                     onClick={() => setMobileMenuOpen(false)}
                   >
-                    <ShoppingCart className="h-4 w-4 text-green-700" />
+                    <ShoppingCart className="h-5 w-5 text-green-600" />
                     <span>السلة</span>
                   </Link>
                   <Link
                     href="/orders"
-                    className="text-sm font-medium flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-green-50 transition-colors"
+                    className="text-sm font-semibold flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-green-50 transition-all duration-300"
                     onClick={() => setMobileMenuOpen(false)}
                   >
-                    <Package className="h-4 w-4 text-green-700" />
+                    <Package className="h-5 w-5 text-green-600" />
                     <span>طلباتي</span>
                   </Link>
                 </>
@@ -164,21 +219,26 @@ export function Header() {
               {isAuthenticated && user?.Role === 'Admin' && (
                 <Link
                   href="/admin"
-                  className="text-sm font-medium flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-green-50 transition-colors"
+                  className="text-sm font-semibold flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-green-50 transition-all duration-300"
                   onClick={() => setMobileMenuOpen(false)}
                 >
-                  <LayoutDashboard className="h-4 w-4 text-green-700" />
+                  <LayoutDashboard className="h-5 w-5 text-green-600" />
                   <span>لوحة الإدارة</span>
                 </Link>
               )}
+              
+              <div className="h-px bg-gradient-to-r from-transparent via-green-200 to-transparent my-2"></div>
+              
               {isAuthenticated ? (
                 <>
                   <Link
                     href="/profile"
-                    className="text-sm font-medium flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-green-50 transition-colors"
+                    className="text-sm font-semibold flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-green-50 transition-all duration-300"
                     onClick={() => setMobileMenuOpen(false)}
                   >
-                    <UserCircle className="h-4 w-4 text-green-700" />
+                    <div className="h-8 w-8 rounded-full bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center">
+                      <UserCircle className="h-5 w-5 text-white" />
+                    </div>
                     <span>{user?.FirstName}</span>
                   </Link>
                   <button
@@ -186,25 +246,28 @@ export function Header() {
                       handleLogout();
                       setMobileMenuOpen(false);
                     }}
-                    className="text-sm font-medium flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-green-50 transition-colors text-left"
+                    className="text-sm font-semibold flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-red-50 text-red-600 transition-all duration-300 text-left"
                   >
-                    <LogOut className="h-4 w-4 text-green-700" />
+                    <LogOut className="h-5 w-5" />
                     <span>خروج</span>
                   </button>
                 </>
               ) : (
-                <>
+                <div className="flex flex-col gap-2 px-2">
                   <Link href="/login" onClick={() => setMobileMenuOpen(false)}>
-                    <Button variant="ghost" className="w-full justify-start">تسجيل دخول</Button>
+                    <Button variant="outline" className="w-full justify-center">تسجيل دخول</Button>
                   </Link>
                   <Link href="/signup" onClick={() => setMobileMenuOpen(false)}>
-                    <Button className="w-full bg-gradient-to-r from-green-700 to-green-600">إنشاء حساب</Button>
+                    <Button className="w-full justify-center">
+                      <Sparkles className="h-4 w-4 mr-2" />
+                      إنشاء حساب
+                    </Button>
                   </Link>
-                </>
+                </div>
               )}
             </nav>
           </div>
-        )}
+        </div>
       </div>
     </header>
   );
