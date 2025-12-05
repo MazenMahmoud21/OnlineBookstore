@@ -8,15 +8,15 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-gradient-to-r from-green-700 to-green-600 text-white shadow-lg hover:shadow-xl hover:from-green-800 hover:to-green-700 hover:-translate-y-0.5",
+          "bg-indigo-600 text-white shadow-lg hover:shadow-xl hover:bg-indigo-700 hover:-translate-y-0.5",
         destructive:
-          "bg-gradient-to-r from-red-600 to-red-500 text-white shadow-lg hover:shadow-xl hover:from-red-700 hover:to-red-600 hover:-translate-y-0.5",
+          "bg-red-600 text-white shadow-lg hover:shadow-xl hover:bg-red-700 hover:-translate-y-0.5",
         outline:
-          "border-2 border-green-600 bg-transparent text-green-700 shadow-sm hover:bg-green-50 hover:border-green-700 hover:shadow-md",
+          "border-2 border-indigo-600 bg-transparent text-indigo-700 shadow-sm hover:bg-indigo-50 hover:border-indigo-700 hover:shadow-md",
         secondary:
-          "bg-gradient-to-r from-yellow-500 to-yellow-400 text-green-900 shadow-lg hover:shadow-xl hover:from-yellow-600 hover:to-yellow-500 hover:-translate-y-0.5",
-        ghost: "hover:bg-green-50 hover:text-green-700 transition-colors",
-        link: "text-green-700 underline-offset-4 hover:underline font-medium",
+          "bg-orange-500 text-white shadow-lg hover:shadow-xl hover:bg-orange-600 hover:-translate-y-0.5",
+        ghost: "hover:bg-indigo-50 hover:text-indigo-700 transition-colors",
+        link: "text-indigo-700 underline-offset-4 hover:underline font-medium",
       },
       size: {
         default: "h-10 px-5 py-2",

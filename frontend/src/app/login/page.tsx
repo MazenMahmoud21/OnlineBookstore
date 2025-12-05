@@ -62,15 +62,15 @@ export default function LoginPage() {
       <Card className="w-full max-w-md shadow-2xl border-none animate-scale-in">
         <CardHeader className="text-center space-y-4 pb-8">
           <Link href="/" className="flex items-center justify-center gap-2 mb-2">
-            <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-green-700 to-green-600 flex items-center justify-center shadow-lg">
+            <div className="h-12 w-12 rounded-xl bg-indigo-600 flex items-center justify-center shadow-lg">
               <BookOpen className="h-7 w-7 text-white" />
             </div>
           </Link>
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-50 rounded-full mx-auto">
-            <Sparkles className="h-4 w-4 text-green-700" />
-            <span className="text-sm font-medium text-green-800">مكتبة المملكة الرقمية</span>
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-50 rounded-full mx-auto">
+            <Sparkles className="h-4 w-4 text-indigo-700" />
+            <span className="text-sm font-medium text-indigo-800">مكتبة المملكة الرقمية</span>
           </div>
-          <CardTitle className="text-3xl font-bold bg-gradient-to-r from-green-800 to-green-600 bg-clip-text text-transparent">مرحبًا بعودتك</CardTitle>
+          <CardTitle className="text-3xl font-bold text-gradient">مرحبًا بعودتك</CardTitle>
           <CardDescription className="text-base">
             سجل دخولك للمتابعة وتصفح مكتبتنا
           </CardDescription>
@@ -83,7 +83,6 @@ export default function LoginPage() {
                 id="username"
                 type="text"
                 placeholder="أحمد_القارئ"
-                className="h-11 border-gray-300 focus:border-green-500 focus:ring-green-500"
                 {...register('username')}
               />
               {errors.username && (
@@ -96,7 +95,6 @@ export default function LoginPage() {
                 id="password"
                 type="password"
                 placeholder="••••••••"
-                className="h-11 border-gray-300 focus:border-green-500 focus:ring-green-500"
                 {...register('password')}
               />
               {errors.password && (
@@ -105,7 +103,7 @@ export default function LoginPage() {
             </div>
             <Button 
               type="submit" 
-              className="w-full h-11 bg-gradient-to-r from-green-700 to-green-600 hover:from-green-800 hover:to-green-700 shadow-lg hover:shadow-xl transition-all duration-300" 
+              className="w-full h-11 shadow-lg hover:shadow-xl transition-all duration-300" 
               disabled={isLoading}
             >
               {isLoading ? (
@@ -125,7 +123,7 @@ export default function LoginPage() {
         <CardFooter className="justify-center border-t pt-6">
           <p className="text-sm text-gray-600">
             ليس لديك حساب؟{' '}
-            <Link href="/signup" className="text-green-700 hover:text-green-800 font-bold hover:underline transition-colors">
+            <Link href="/signup" className="text-indigo-700 hover:text-indigo-800 font-bold hover:underline transition-colors">
               إنشاء حساب جديد
             </Link>
           </p>

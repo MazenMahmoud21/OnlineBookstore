@@ -32,7 +32,7 @@ export function Header() {
   return (
     <header className={`sticky top-0 z-50 w-full transition-all duration-500 ${
       scrolled 
-        ? 'bg-white/95 backdrop-blur-xl shadow-lg border-b border-green-100' 
+        ? 'bg-white/95 backdrop-blur-xl shadow-lg border-b border-indigo-100' 
         : 'bg-white/80 backdrop-blur-md shadow-sm'
     }`}>
       <div className="container mx-auto px-4">
@@ -40,10 +40,10 @@ export function Header() {
           {/* Logo with enhanced design */}
           <Link href="/" className="flex items-center gap-3 group">
             <div className="relative">
-              <div className="h-11 w-11 rounded-xl bg-gradient-to-br from-green-600 to-green-700 flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-105">
+              <div className="h-11 w-11 rounded-xl bg-indigo-600 flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-105">
                 <BookOpen className="h-6 w-6 text-white" />
               </div>
-              <div className="absolute -top-1 -right-1 h-4 w-4 bg-gradient-to-br from-yellow-400 to-yellow-500 rounded-full flex items-center justify-center shadow-md">
+              <div className="absolute -top-1 -right-1 h-4 w-4 bg-orange-500 rounded-full flex items-center justify-center shadow-md">
                 <Sparkles className="h-2.5 w-2.5 text-white" />
               </div>
             </div>
@@ -64,14 +64,14 @@ export function Header() {
                 href={item.href}
                 className={`relative px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 flex items-center gap-2 group ${
                   isActive(item.href) 
-                    ? 'text-green-700 bg-green-50' 
-                    : 'text-gray-600 hover:text-green-700 hover:bg-green-50/50'
+                    ? 'text-indigo-700 bg-indigo-50' 
+                    : 'text-gray-600 hover:text-indigo-700 hover:bg-indigo-50/50'
                 }`}
               >
-                <item.icon className={`h-4 w-4 transition-transform duration-300 ${isActive(item.href) ? 'text-green-600' : 'group-hover:scale-110'}`} />
+                <item.icon className={`h-4 w-4 transition-transform duration-300 ${isActive(item.href) ? 'text-indigo-600' : 'group-hover:scale-110'}`} />
                 {item.label}
                 {isActive(item.href) && (
-                  <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-gradient-to-r from-green-500 to-green-600 rounded-full"></span>
+                  <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-indigo-600 rounded-full"></span>
                 )}
               </Link>
             ))}
@@ -82,30 +82,30 @@ export function Header() {
                   href="/cart"
                   className={`relative px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 flex items-center gap-2 group ${
                     isActive('/cart') 
-                      ? 'text-green-700 bg-green-50' 
-                      : 'text-gray-600 hover:text-green-700 hover:bg-green-50/50'
+                      ? 'text-indigo-700 bg-indigo-50' 
+                      : 'text-gray-600 hover:text-indigo-700 hover:bg-indigo-50/50'
                   }`}
                 >
                   <div className="relative">
-                    <ShoppingCart className={`h-4 w-4 transition-transform duration-300 ${isActive('/cart') ? 'text-green-600' : 'group-hover:scale-110'}`} />
+                    <ShoppingCart className={`h-4 w-4 transition-transform duration-300 ${isActive('/cart') ? 'text-indigo-600' : 'group-hover:scale-110'}`} />
                   </div>
                   السلة
                   {isActive('/cart') && (
-                    <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-gradient-to-r from-green-500 to-green-600 rounded-full"></span>
+                    <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-indigo-600 rounded-full"></span>
                   )}
                 </Link>
                 <Link
                   href="/orders"
                   className={`relative px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 flex items-center gap-2 group ${
                     isActive('/orders') 
-                      ? 'text-green-700 bg-green-50' 
-                      : 'text-gray-600 hover:text-green-700 hover:bg-green-50/50'
+                      ? 'text-indigo-700 bg-indigo-50' 
+                      : 'text-gray-600 hover:text-indigo-700 hover:bg-indigo-50/50'
                   }`}
                 >
-                  <Package className={`h-4 w-4 transition-transform duration-300 ${isActive('/orders') ? 'text-green-600' : 'group-hover:scale-110'}`} />
+                  <Package className={`h-4 w-4 transition-transform duration-300 ${isActive('/orders') ? 'text-indigo-600' : 'group-hover:scale-110'}`} />
                   طلباتي
                   {isActive('/orders') && (
-                    <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-gradient-to-r from-green-500 to-green-600 rounded-full"></span>
+                    <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-indigo-600 rounded-full"></span>
                   )}
                 </Link>
               </>
@@ -115,14 +115,14 @@ export function Header() {
                 href="/admin"
                 className={`relative px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 flex items-center gap-2 group ${
                   pathname.startsWith('/admin') 
-                    ? 'text-green-700 bg-green-50' 
-                    : 'text-gray-600 hover:text-green-700 hover:bg-green-50/50'
+                    ? 'text-indigo-700 bg-indigo-50' 
+                    : 'text-gray-600 hover:text-indigo-700 hover:bg-indigo-50/50'
                 }`}
               >
-                <LayoutDashboard className={`h-4 w-4 transition-transform duration-300 ${pathname.startsWith('/admin') ? 'text-green-600' : 'group-hover:scale-110'}`} />
+                <LayoutDashboard className={`h-4 w-4 transition-transform duration-300 ${pathname.startsWith('/admin') ? 'text-indigo-600' : 'group-hover:scale-110'}`} />
                 لوحة الإدارة
                 {pathname.startsWith('/admin') && (
-                  <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-gradient-to-r from-green-500 to-green-600 rounded-full"></span>
+                  <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-indigo-600 rounded-full"></span>
                 )}
               </Link>
             )}
@@ -132,15 +132,15 @@ export function Header() {
           <div className="hidden md:flex items-center gap-3">
             {isAuthenticated ? (
               <>
-                <Link href="/profile" className="flex items-center gap-2 text-sm px-4 py-2.5 rounded-xl hover:bg-green-50 transition-all duration-300 group">
-                  <div className="h-8 w-8 rounded-full bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center shadow-md group-hover:shadow-lg transition-shadow">
+                <Link href="/profile" className="flex items-center gap-2 text-sm px-4 py-2.5 rounded-xl hover:bg-indigo-50 transition-all duration-300 group">
+                  <div className="h-8 w-8 rounded-full bg-indigo-600 flex items-center justify-center shadow-md group-hover:shadow-lg transition-shadow">
                     <UserCircle className="h-5 w-5 text-white" />
                   </div>
                   <div className="flex flex-col items-start">
-                    <span className="font-semibold text-gray-800 group-hover:text-green-700 transition-colors">{user?.FirstName}</span>
+                    <span className="font-semibold text-gray-800 group-hover:text-indigo-700 transition-colors">{user?.FirstName}</span>
                     <span className="text-xs text-gray-500">{user?.Role === 'Admin' ? 'مدير' : 'عميل'}</span>
                   </div>
-                  <ChevronDown className="h-4 w-4 text-gray-400 group-hover:text-green-600 transition-colors" />
+                  <ChevronDown className="h-4 w-4 text-gray-400 group-hover:text-indigo-600 transition-colors" />
                 </Link>
                 <Button variant="ghost" size="sm" onClick={handleLogout} className="text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-xl">
                   <LogOut className="h-4 w-4 mr-2" />
@@ -150,7 +150,7 @@ export function Header() {
             ) : (
               <>
                 <Link href="/login">
-                  <Button variant="ghost" size="sm" className="text-gray-600 hover:text-green-700 hover:bg-green-50 rounded-xl font-semibold">تسجيل دخول</Button>
+                  <Button variant="ghost" size="sm" className="text-gray-600 hover:text-indigo-700 hover:bg-indigo-50 rounded-xl font-semibold">تسجيل دخول</Button>
                 </Link>
                 <Link href="/signup">
                   <Button size="sm" className="shadow-lg hover:shadow-xl rounded-xl">
@@ -164,15 +164,15 @@ export function Header() {
 
           {/* Mobile Menu Button with animation */}
           <button
-            className="md:hidden p-2.5 rounded-xl hover:bg-green-50 transition-all duration-300 relative"
+            className="md:hidden p-2.5 rounded-xl hover:bg-indigo-50 transition-all duration-300 relative"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label={mobileMenuOpen ? 'إغلاق القائمة' : 'فتح القائمة'}
             aria-expanded={mobileMenuOpen}
             aria-controls="mobile-menu"
           >
             <div className="relative w-6 h-6">
-              <Menu className={`h-6 w-6 text-green-700 absolute inset-0 transition-all duration-300 ${mobileMenuOpen ? 'opacity-0 rotate-90 scale-0' : 'opacity-100 rotate-0 scale-100'}`} />
-              <X className={`h-6 w-6 text-green-700 absolute inset-0 transition-all duration-300 ${mobileMenuOpen ? 'opacity-100 rotate-0 scale-100' : 'opacity-0 -rotate-90 scale-0'}`} />
+              <Menu className={`h-6 w-6 text-indigo-700 absolute inset-0 transition-all duration-300 ${mobileMenuOpen ? 'opacity-0 rotate-90 scale-0' : 'opacity-100 rotate-0 scale-100'}`} />
+              <X className={`h-6 w-6 text-indigo-700 absolute inset-0 transition-all duration-300 ${mobileMenuOpen ? 'opacity-100 rotate-0 scale-100' : 'opacity-0 -rotate-90 scale-0'}`} />
             </div>
           </button>
         </div>
@@ -183,7 +183,7 @@ export function Header() {
           className={`md:hidden overflow-hidden transition-all duration-500 ease-in-out ${mobileMenuOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0'}`}
           aria-hidden={!mobileMenuOpen}
         >
-          <div className="py-4 border-t border-green-100">
+          <div className="py-4 border-t border-indigo-100">
             <nav className="flex flex-col gap-2" role="navigation" aria-label="القائمة الرئيسية">
               {[
                 { href: '/books', icon: BookOpen, label: 'المكتبة' },
@@ -193,12 +193,12 @@ export function Header() {
                   key={item.href}
                   href={item.href}
                   className={`text-sm font-semibold flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 ${
-                    isActive(item.href) ? 'bg-green-50 text-green-700' : 'hover:bg-green-50/50 text-gray-700'
+                    isActive(item.href) ? 'bg-indigo-50 text-indigo-700' : 'hover:bg-indigo-50/50 text-gray-700'
                   }`}
                   onClick={() => setMobileMenuOpen(false)}
                   style={{ animationDelay: `${index * 50}ms` }}
                 >
-                  <item.icon className="h-5 w-5 text-green-600" />
+                  <item.icon className="h-5 w-5 text-indigo-600" />
                   <span>{item.label}</span>
                 </Link>
               ))}
@@ -207,18 +207,18 @@ export function Header() {
                 <>
                   <Link
                     href="/cart"
-                    className="text-sm font-semibold flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-green-50 transition-all duration-300"
+                    className="text-sm font-semibold flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-indigo-50 transition-all duration-300"
                     onClick={() => setMobileMenuOpen(false)}
                   >
-                    <ShoppingCart className="h-5 w-5 text-green-600" />
+                    <ShoppingCart className="h-5 w-5 text-indigo-600" />
                     <span>السلة</span>
                   </Link>
                   <Link
                     href="/orders"
-                    className="text-sm font-semibold flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-green-50 transition-all duration-300"
+                    className="text-sm font-semibold flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-indigo-50 transition-all duration-300"
                     onClick={() => setMobileMenuOpen(false)}
                   >
-                    <Package className="h-5 w-5 text-green-600" />
+                    <Package className="h-5 w-5 text-indigo-600" />
                     <span>طلباتي</span>
                   </Link>
                 </>
@@ -226,24 +226,24 @@ export function Header() {
               {isAuthenticated && user?.Role === 'Admin' && (
                 <Link
                   href="/admin"
-                  className="text-sm font-semibold flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-green-50 transition-all duration-300"
+                  className="text-sm font-semibold flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-indigo-50 transition-all duration-300"
                   onClick={() => setMobileMenuOpen(false)}
                 >
-                  <LayoutDashboard className="h-5 w-5 text-green-600" />
+                  <LayoutDashboard className="h-5 w-5 text-indigo-600" />
                   <span>لوحة الإدارة</span>
                 </Link>
               )}
               
-              <div className="h-px bg-gradient-to-r from-transparent via-green-200 to-transparent my-2"></div>
+              <div className="h-px bg-gradient-to-r from-transparent via-indigo-200 to-transparent my-2"></div>
               
               {isAuthenticated ? (
                 <>
                   <Link
                     href="/profile"
-                    className="text-sm font-semibold flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-green-50 transition-all duration-300"
+                    className="text-sm font-semibold flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-indigo-50 transition-all duration-300"
                     onClick={() => setMobileMenuOpen(false)}
                   >
-                    <div className="h-8 w-8 rounded-full bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center">
+                    <div className="h-8 w-8 rounded-full bg-indigo-600 flex items-center justify-center">
                       <UserCircle className="h-5 w-5 text-white" />
                     </div>
                     <span>{user?.FirstName}</span>
